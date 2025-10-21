@@ -126,12 +126,12 @@ export default function AiceQuizApp() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-2 sm:p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-2 sm:p-4">
       <div className="max-w-2xl mx-auto w-full">
         {/* 헤더 */}
         <div className="mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">🎯 AICE 퀴즈</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground">🎯 AICE 퀴즈</h1>
                   <div className="flex flex-wrap items-center gap-2">
                     <Badge variant="outline" className="text-sm">
                       {score} / {totalAnswered}
@@ -165,16 +165,16 @@ export default function AiceQuizApp() {
           
           {/* 필터링 옵션 */}
           {showFilters && (
-            <div className="bg-gray-50 p-3 sm:p-4 rounded-lg mb-4">
+            <div className="bg-muted p-3 sm:p-4 rounded-lg mb-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     카테고리
                   </label>
                   <select
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded-lg"
+                    className="w-full p-2 border border-input bg-background text-foreground rounded-lg"
                   >
                     <option value="전체">전체</option>
                     {getCategories().map(category => (
@@ -186,13 +186,13 @@ export default function AiceQuizApp() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     난이도
                   </label>
                   <select
                     value={selectedDifficulty}
                     onChange={(e) => setSelectedDifficulty(e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded-lg"
+                    className="w-full p-2 border border-input bg-background text-foreground rounded-lg"
                   >
                     <option value="전체">전체</option>
                     <option value="easy">쉬움</option>
@@ -202,13 +202,13 @@ export default function AiceQuizApp() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     유형
                   </label>
                   <select
                     value={selectedType}
                     onChange={(e) => setSelectedType(e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded-lg"
+                    className="w-full p-2 border border-input bg-background text-foreground rounded-lg"
                   >
                     <option value="전체">전체</option>
                     <option value="개념">개념</option>
@@ -225,7 +225,7 @@ export default function AiceQuizApp() {
                     <select
                       value={questionCount}
                       onChange={(e) => setQuestionCount(Number(e.target.value))}
-                      className="w-full p-2 border border-gray-300 rounded-lg"
+                      className="w-full p-2 border border-input bg-background text-foreground rounded-lg"
                     >
                       {availableCounts.map(count => (
                         <option key={count} value={count}>
@@ -237,10 +237,10 @@ export default function AiceQuizApp() {
                 )}
               </div>
 
-              <div className="mt-3 flex items-center justify-between text-sm text-gray-600">
+              <div className="mt-3 flex items-center justify-between text-sm text-muted-foreground">
                 <span>총 {shuffledCards.length}개 문제</span>
                 {isRandomMode && (
-                  <span className="text-blue-600 font-medium">
+                  <span className="text-primary font-medium">
                     🎲 랜덤 모드: {questionCount}개 문제
                   </span>
                 )}
@@ -250,7 +250,7 @@ export default function AiceQuizApp() {
           
           {/* 진행률 */}
           <div className="mb-4">
-            <div className="flex justify-between text-sm text-gray-600 mb-2">
+            <div className="flex justify-between text-sm text-muted-foreground mb-2">
               <span>진행률</span>
               <span>{currentCardIndex + 1} / {shuffledCards.length}</span>
             </div>
@@ -273,7 +273,7 @@ export default function AiceQuizApp() {
                    currentCard.difficulty === 'medium' ? '보통' : '어려움'}
                 </Badge>
               </div>
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-muted-foreground">
                 문제 {currentCardIndex + 1}
               </span>
             </div>
@@ -282,7 +282,7 @@ export default function AiceQuizApp() {
           <CardContent className="space-y-6">
             {/* 질문 */}
             <div>
-              <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4 break-words">
+              <h2 className="text-lg sm:text-xl font-semibold text-foreground mb-4 break-words">
                 {currentCard.question}
               </h2>
             </div>
@@ -316,7 +316,7 @@ export default function AiceQuizApp() {
                         <div className="font-medium mb-2 text-sm">
                           {String.fromCharCode(65 + index)}.
                         </div>
-                        <pre className="bg-gray-100 dark:bg-gray-800 p-2 sm:p-3 rounded text-xs sm:text-sm font-mono whitespace-pre-wrap break-words overflow-hidden">
+                        <pre className="bg-muted p-2 sm:p-3 rounded text-xs sm:text-sm font-mono whitespace-pre-wrap break-words overflow-hidden text-foreground">
                           {option}
                         </pre>
                       </div>
@@ -333,20 +333,20 @@ export default function AiceQuizApp() {
 
             {/* 결과 및 설명 */}
             {showResult && (
-              <div className="bg-gray-50 p-4 rounded-lg border-l-4 border-blue-500">
+              <div className="bg-muted p-4 rounded-lg border-l-4 border-primary">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-lg">
                     {selectedOption === 0 ? '🎉' : '😅'}
                   </span>
-                  <h3 className="font-medium text-gray-700">
+                  <h3 className="font-medium text-foreground">
                     {selectedOption === 0 ? '정답입니다!' : '틀렸습니다.'}
                   </h3>
                 </div>
                 
                 {/* 정답 표시 */}
-                <div className="bg-green-50 p-3 rounded mb-3 border border-green-200">
-                  <h4 className="font-medium text-green-800 mb-2">✅ 정답:</h4>
-                  <p className="text-green-700 text-sm">{currentCard.answer}</p>
+                <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded mb-3 border border-green-200 dark:border-green-800">
+                  <h4 className="font-medium text-green-800 dark:text-green-200 mb-2">✅ 정답:</h4>
+                  <p className="text-green-700 dark:text-green-300 text-sm">{currentCard.answer}</p>
                 </div>
                 
                 {/* 코드 블록 (코드 카드인 경우) */}
@@ -373,10 +373,10 @@ export default function AiceQuizApp() {
                 
                 {/* 설명 */}
                 {currentCard.explanation && (
-                  <div className="bg-blue-50 p-3 rounded border border-blue-200">
-                    <h4 className="font-medium text-blue-800 mb-1">💡 설명:</h4>
-                    <p className="text-blue-700 text-sm">{currentCard.explanation}</p>
-                  </div>
+                <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded border border-blue-200 dark:border-blue-800">
+                  <h4 className="font-medium text-blue-800 dark:text-blue-200 mb-1">💡 설명:</h4>
+                  <p className="text-blue-700 dark:text-blue-300 text-sm">{currentCard.explanation}</p>
+                </div>
                 )}
               </div>
             )}
@@ -394,10 +394,10 @@ export default function AiceQuizApp() {
               
               {isQuizComplete ? (
                 <div className="text-center">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                  <h3 className="text-lg font-semibold text-foreground mb-2">
                     🎊 퀴즈 완료!
                   </h3>
-                  <p className="text-gray-600 mb-4">
+                  <p className="text-muted-foreground mb-4">
                     점수: {score} / {totalAnswered} ({Math.round((score / totalAnswered) * 100)}%)
                   </p>
                   <Button onClick={restartQuiz} className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto text-sm">
@@ -419,7 +419,7 @@ export default function AiceQuizApp() {
         </Card>
 
         {/* 스와이프 힌트 */}
-        <div className="text-center text-sm text-gray-500 mt-4">
+        <div className="text-center text-sm text-muted-foreground mt-4">
           💡 좌우로 스와이프하여 문제를 넘겨보세요
         </div>
       </div>
