@@ -194,8 +194,8 @@ export default function AiceQuizApp() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-2 sm:p-4">
-      <div className="max-w-2xl mx-auto w-full">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 overflow-x-hidden">
+      <div className="max-w-2xl mx-auto w-full p-1 sm:p-4">
       {/* 헤더 */}
         <div className="mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
@@ -233,8 +233,8 @@ export default function AiceQuizApp() {
         
           {/* 필터링 옵션 */}
           {showFilters && (
-            <div className="bg-muted p-3 sm:p-4 rounded-lg mb-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div className="bg-muted p-2 sm:p-4 rounded-lg mb-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
                     카테고리
@@ -242,7 +242,7 @@ export default function AiceQuizApp() {
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="w-full p-2 border border-input bg-background text-foreground rounded-lg"
+                    className="w-full p-2 border border-input bg-background text-foreground rounded-lg text-sm"
           >
                     <option value="전체">전체</option>
                     {getCategories().map(category => (
@@ -260,7 +260,7 @@ export default function AiceQuizApp() {
                   <select
                     value={selectedDifficulty}
                     onChange={(e) => setSelectedDifficulty(e.target.value)}
-                    className="w-full p-2 border border-input bg-background text-foreground rounded-lg"
+                    className="w-full p-2 border border-input bg-background text-foreground rounded-lg text-sm"
                   >
                     <option value="전체">전체</option>
                     <option value="easy">쉬움</option>
@@ -276,7 +276,7 @@ export default function AiceQuizApp() {
                   <select
                     value={selectedType}
                     onChange={(e) => setSelectedType(e.target.value)}
-                    className="w-full p-2 border border-input bg-background text-foreground rounded-lg"
+                    className="w-full p-2 border border-input bg-background text-foreground rounded-lg text-sm"
                   >
                     <option value="전체">전체</option>
                     <option value="개념">개념</option>
@@ -293,7 +293,7 @@ export default function AiceQuizApp() {
                     <select
                       value={questionCount}
                       onChange={(e) => setQuestionCount(Number(e.target.value))}
-                      className="w-full p-2 border border-input bg-background text-foreground rounded-lg"
+                      className="w-full p-2 border border-input bg-background text-foreground rounded-lg text-sm"
                     >
                       {availableCounts.map(count => (
                         <option key={count} value={count}>
@@ -327,7 +327,7 @@ export default function AiceQuizApp() {
         </div>
 
         {/* 퀴즈 카드 */}
-        <Card className="shadow-lg">
+        <Card className="shadow-lg overflow-hidden">
           <CardHeader className="pb-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div className="flex flex-wrap items-center gap-2">
@@ -350,7 +350,7 @@ export default function AiceQuizApp() {
           <CardContent className="space-y-6">
             {/* 질문 */}
             <div>
-              <h2 className="text-lg sm:text-xl font-semibold text-foreground mb-4 break-words">
+              <h2 className="text-base sm:text-xl font-semibold text-foreground mb-4 break-words leading-tight">
                 {currentCard.question}
               </h2>
                 </div>
@@ -367,7 +367,7 @@ export default function AiceQuizApp() {
                   <Button
                     key={index}
                     variant="outline"
-                    className={`w-full justify-start p-3 sm:p-4 h-auto text-left ${
+                    className={`w-full justify-start p-2 sm:p-4 h-auto text-left ${
                       !showResult 
                         ? 'hover:bg-primary/10 hover:border-primary/30' 
                         : showCorrect
@@ -384,7 +384,7 @@ export default function AiceQuizApp() {
                         <div className="font-medium mb-2 text-sm">
                           {String.fromCharCode(65 + index)}.
                         </div>
-                        <pre className="bg-muted p-2 sm:p-3 rounded text-xs sm:text-sm font-mono whitespace-pre-wrap break-words overflow-hidden text-foreground">
+                        <pre className="bg-muted p-2 sm:p-3 rounded text-xs sm:text-sm font-mono whitespace-pre-wrap break-words overflow-hidden text-foreground leading-relaxed">
                           {option}
                         </pre>
                       </div>
@@ -417,8 +417,8 @@ export default function AiceQuizApp() {
                   <p className="text-green-700 dark:text-green-300 text-sm">{currentCard.answer}</p>
                   </div>
                   
-                {/* 코드 블록 (코드 카드인 경우) */}
-                {currentCard.type === '코드' && currentCard.code && (
+                  {/* 코드 블록 (코드 카드인 경우) */}
+                  {currentCard.type === '코드' && currentCard.code && (
                   <div className="space-y-3 mb-3">
                     <div className="bg-gray-900 dark:bg-gray-800 text-green-400 dark:text-green-300 p-2 sm:p-3 rounded text-xs sm:text-sm font-mono overflow-hidden">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2">
@@ -467,8 +467,8 @@ export default function AiceQuizApp() {
                         })}
                       </div>
                     </div>
-                  </div>
-                )}
+                    </div>
+                  )}
                   
                   {/* 설명 */}
                   {currentCard.explanation && (
@@ -481,7 +481,7 @@ export default function AiceQuizApp() {
               )}
               
             {/* 네비게이션 */}
-            <div className="flex flex-col sm:flex-row justify-between items-center pt-4 gap-3">
+            <div className="flex flex-col sm:flex-row justify-between items-center pt-4 gap-2 sm:gap-3">
               <Button
                 variant="outline"
                 className="w-full sm:w-auto text-sm"
