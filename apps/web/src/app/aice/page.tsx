@@ -156,6 +156,38 @@ export default function AiceQuizApp() {
     }
   };
 
+  // 터치/스와이프 이벤트 처리
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe && currentCardIndex < shuffledCards.length - 1) {
+      // 왼쪽 스와이프 = 다음 문제
+      nextQuestion();
+    }
+    if (isRightSwipe && currentCardIndex > 0) {
+      // 오른쪽 스와이프 = 이전 문제
+      prevQuestion();
+    }
+  };
+
   // 퀴즈 완료 여부
   const isQuizComplete = currentCardIndex === shuffledCards.length - 1 && selectedOption !== null;
 
@@ -430,7 +462,12 @@ export default function AiceQuizApp() {
         </div>
 
         {/* 퀴즈 카드 */}
-        <Card className="shadow-lg overflow-hidden w-full">
+        <Card 
+          className="shadow-lg overflow-hidden w-full"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
           <CardHeader className="pb-4 w-full">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 w-full">
               <div className="flex flex-wrap items-center gap-2">
@@ -444,9 +481,14 @@ export default function AiceQuizApp() {
                  currentCard.difficulty === 'medium' ? '보통' : '어려움'}
                 </Badge>
               </div>
-              <span className="text-xs text-muted-foreground">
-                문제 {currentCardIndex + 1}
-              </span>
+              <div className="text-right">
+                <span className="text-xs text-muted-foreground">
+                  문제 {currentCardIndex + 1}
+                </span>
+                <div className="text-xs text-muted-foreground mt-1">
+                  ← 스와이프 →
+                </div>
+              </div>
             </div>
           </CardHeader>
 
