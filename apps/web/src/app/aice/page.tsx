@@ -26,6 +26,9 @@ export default function AiceQuizApp() {
   const [isRandomMode, setIsRandomMode] = useState(false);
   const [questionCount, setQuestionCount] = useState<number>(10);
   const [availableCounts] = useState([5, 10, 15, 20, 30, 50, 100]);
+  
+  // 각 카드의 옵션을 저장하는 상태
+  const [cardOptions, setCardOptions] = useState<{[key: string]: string[]}>({});
 
   const currentCard = shuffledCards[currentCardIndex];
   const progressPercentage = shuffledCards.length > 0 ? ((currentCardIndex + 1) / shuffledCards.length) * 100 : 0;
@@ -56,16 +59,30 @@ export default function AiceQuizApp() {
       setShuffledCards(shuffled);
     }
     
-      setCurrentCardIndex(0);
+    // 새로운 카드 세트에 대해 옵션 생성
+    const newCardOptions: {[key: string]: string[]} = {};
+    const cardsToProcess = isRandomMode ? 
+      filteredCards.sort(() => Math.random() - 0.5).slice(0, Math.min(questionCount, filteredCards.length)) :
+      filteredCards.sort(() => Math.random() - 0.5);
+    
+    cardsToProcess.forEach(card => {
+      if (!cardOptions[card.id]) {
+        newCardOptions[card.id] = generateQuizOptions(card);
+      }
+    });
+    
+    setCardOptions(prev => ({...prev, ...newCardOptions}));
+    
+    setCurrentCardIndex(0);
     setSelectedOption(null);
     setShowResult(false);
     setScore(0);
     setTotalAnswered(0);
   }, [selectedCategory, selectedDifficulty, selectedType, isRandomMode, questionCount]);
 
-  // 퀴즈 옵션 생성
+  // 퀴즈 옵션 생성 (저장된 옵션 사용)
   const getQuizOptions = (card: AiceCard) => {
-    return generateQuizOptions(card);
+    return cardOptions[card.id] || generateQuizOptions(card);
   };
 
   // 퀴즈 선택 처리
