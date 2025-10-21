@@ -56,7 +56,7 @@ export default function AiceQuizApp() {
       setShuffledCards(shuffled);
     }
     
-    setCurrentCardIndex(0);
+      setCurrentCardIndex(0);
     setSelectedOption(null);
     setShowResult(false);
     setScore(0);
@@ -114,6 +114,74 @@ export default function AiceQuizApp() {
   // 퀴즈 완료 여부
   const isQuizComplete = currentCardIndex === shuffledCards.length - 1 && selectedOption !== null;
 
+  // 코드 한 줄씩 분석하는 함수
+  const analyzeCodeLine = (line: string, index: number) => {
+    const trimmedLine = line.trim();
+    
+    // 빈 줄 처리
+    if (!trimmedLine) {
+      return { line, explanation: '빈 줄' };
+    }
+
+    // import 문 분석
+    if (trimmedLine.startsWith('import ')) {
+      if (trimmedLine.includes('numpy')) {
+        return { line, explanation: 'NumPy 라이브러리를 np라는 별칭으로 가져옵니다. 수치 계산과 배열 연산을 위한 핵심 라이브러리입니다.' };
+      } else if (trimmedLine.includes('pandas')) {
+        return { line, explanation: 'Pandas 라이브러리를 pd라는 별칭으로 가져옵니다. 데이터 분석과 조작을 위한 라이브러리입니다.' };
+      } else if (trimmedLine.includes('matplotlib')) {
+        return { line, explanation: 'Matplotlib 라이브러리를 가져옵니다. 그래프와 차트를 그리기 위한 시각화 라이브러리입니다.' };
+      } else if (trimmedLine.includes('seaborn')) {
+        return { line, explanation: 'Seaborn 라이브러리를 가져옵니다. 통계적 데이터 시각화를 위한 고급 라이브러리입니다.' };
+      } else if (trimmedLine.includes('sklearn')) {
+        return { line, explanation: 'Scikit-learn 라이브러리를 가져옵니다. 머신러닝 알고리즘과 도구들을 제공하는 라이브러리입니다.' };
+      } else {
+        return { line, explanation: '외부 라이브러리를 가져오는 import 문입니다.' };
+      }
+    }
+
+    // 변수 할당 분석
+    if (trimmedLine.includes('=') && !trimmedLine.includes('==') && !trimmedLine.includes('!=')) {
+      if (trimmedLine.includes('np.')) {
+        return { line, explanation: 'NumPy 함수를 사용하여 변수에 값을 할당합니다. NumPy는 고성능 수치 계산을 제공합니다.' };
+      } else if (trimmedLine.includes('pd.')) {
+        return { line, explanation: 'Pandas 함수를 사용하여 데이터프레임이나 시리즈를 생성합니다. 데이터 분석의 핵심 객체입니다.' };
+      } else if (trimmedLine.includes('plt.')) {
+        return { line, explanation: 'Matplotlib의 pyplot을 사용하여 그래프를 그립니다. 시각화의 기본 도구입니다.' };
+      } else {
+        return { line, explanation: '변수에 값을 할당하는 문장입니다.' };
+      }
+    }
+
+    // 함수 정의 분석
+    if (trimmedLine.startsWith('def ')) {
+      return { line, explanation: '함수를 정의합니다. 재사용 가능한 코드 블록을 만듭니다.' };
+    }
+
+    // 반복문 분석
+    if (trimmedLine.startsWith('for ') || trimmedLine.startsWith('while ')) {
+      return { line, explanation: '반복문을 시작합니다. 조건에 따라 코드를 반복 실행합니다.' };
+    }
+
+    // 조건문 분석
+    if (trimmedLine.startsWith('if ') || trimmedLine.startsWith('elif ') || trimmedLine.startsWith('else:')) {
+      return { line, explanation: '조건문입니다. 특정 조건에 따라 다른 코드를 실행합니다.' };
+    }
+
+    // return 문 분석
+    if (trimmedLine.startsWith('return ')) {
+      return { line, explanation: '함수에서 값을 반환합니다. 함수의 결과를 호출한 곳으로 전달합니다.' };
+    }
+
+    // print 문 분석
+    if (trimmedLine.startsWith('print(')) {
+      return { line, explanation: '화면에 결과를 출력합니다. 디버깅이나 결과 확인에 사용됩니다.' };
+    }
+
+    // 기본 설명
+    return { line, explanation: `코드의 ${index + 1}번째 줄입니다.` };
+  };
+
   if (shuffledCards.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
@@ -128,7 +196,7 @@ export default function AiceQuizApp() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-2 sm:p-4">
       <div className="max-w-2xl mx-auto w-full">
-        {/* 헤더 */}
+      {/* 헤더 */}
         <div className="mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
             <h1 className="text-2xl sm:text-3xl font-bold text-foreground">🎯 AICE 퀴즈</h1>
@@ -152,17 +220,17 @@ export default function AiceQuizApp() {
                     >
                       🔍
                     </Button>
-                    <Button 
+            <Button
                       variant="outline" 
-                      size="sm" 
+              size="sm"
                       className="text-xs px-2 py-1"
                       onClick={restartQuiz}
-                    >
+            >
                       🔄
-                    </Button>
-                  </div>
+            </Button>
           </div>
-          
+        </div>
+        
           {/* 필터링 옵션 */}
           {showFilters && (
             <div className="bg-muted p-3 sm:p-4 rounded-lg mb-4">
@@ -171,20 +239,20 @@ export default function AiceQuizApp() {
                   <label className="block text-sm font-medium text-foreground mb-2">
                     카테고리
                   </label>
-                  <select
-                    value={selectedCategory}
-                    onChange={(e) => setSelectedCategory(e.target.value)}
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
                     className="w-full p-2 border border-input bg-background text-foreground rounded-lg"
-                  >
+          >
                     <option value="전체">전체</option>
                     {getCategories().map(category => (
-                      <option key={category} value={category}>
-                        {category}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+        </div>
+        
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
                     난이도
@@ -215,7 +283,7 @@ export default function AiceQuizApp() {
                     <option value="코드">코드</option>
                     <option value="해석">해석</option>
                   </select>
-                </div>
+          </div>
 
                 {isRandomMode && (
                   <div>
@@ -233,9 +301,9 @@ export default function AiceQuizApp() {
                         </option>
                       ))}
                     </select>
-                  </div>
+        </div>
                 )}
-              </div>
+      </div>
 
               <div className="mt-3 flex items-center justify-between text-sm text-muted-foreground">
                 <span>총 {shuffledCards.length}개 문제</span>
@@ -268,9 +336,9 @@ export default function AiceQuizApp() {
                   currentCard.difficulty === 'easy' ? 'text-green-600 dark:text-green-400 border-green-200 dark:border-green-800' :
                   currentCard.difficulty === 'medium' ? 'text-yellow-600 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800' :
                   'text-red-600 dark:text-red-400 border-red-200 dark:border-red-800'
-                }`}>
-                  {currentCard.difficulty === 'easy' ? '쉬움' : 
-                   currentCard.difficulty === 'medium' ? '보통' : '어려움'}
+              }`}>
+                {currentCard.difficulty === 'easy' ? '쉬움' : 
+                 currentCard.difficulty === 'medium' ? '보통' : '어려움'}
                 </Badge>
               </div>
               <span className="text-xs text-muted-foreground">
@@ -278,14 +346,14 @@ export default function AiceQuizApp() {
               </span>
             </div>
           </CardHeader>
-          
+
           <CardContent className="space-y-6">
             {/* 질문 */}
             <div>
               <h2 className="text-lg sm:text-xl font-semibold text-foreground mb-4 break-words">
                 {currentCard.question}
               </h2>
-            </div>
+                </div>
 
             {/* 선택지 */}
             <div className="space-y-3">
@@ -329,58 +397,89 @@ export default function AiceQuizApp() {
                   </Button>
                 );
               })}
-            </div>
+                </div>
 
             {/* 결과 및 설명 */}
             {showResult && (
               <div className="bg-muted p-4 rounded-lg border-l-4 border-primary">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-lg">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-lg">
                     {selectedOption === 0 ? '🎉' : '😅'}
-                  </span>
+                    </span>
                   <h3 className="font-medium text-foreground">
                     {selectedOption === 0 ? '정답입니다!' : '틀렸습니다.'}
-                  </h3>
-                </div>
-                
-                {/* 정답 표시 */}
-                <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded mb-3 border border-green-200 dark:border-green-800">
-                  <h4 className="font-medium text-green-800 dark:text-green-200 mb-2">✅ 정답:</h4>
+                    </h3>
+                  </div>
+                  
+                  {/* 정답 표시 */}
+                  <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded mb-3 border border-green-200 dark:border-green-800">
+                    <h4 className="font-medium text-green-800 dark:text-green-200 mb-2">✅ 정답:</h4>
                   <p className="text-green-700 dark:text-green-300 text-sm">{currentCard.answer}</p>
-                </div>
-                
+                  </div>
+                  
                 {/* 코드 블록 (코드 카드인 경우) */}
                 {currentCard.type === '코드' && currentCard.code && (
-                  <div className="bg-gray-900 dark:bg-gray-800 text-green-400 dark:text-green-300 p-2 sm:p-3 rounded text-xs sm:text-sm font-mono overflow-hidden mb-3">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2">
-                      <span className="text-gray-400 dark:text-gray-500 text-xs">실행 코드:</span>
-                      <button
-                        onClick={() => {
-                          navigator.clipboard.writeText(currentCard.code || '');
-                          const btn = document.activeElement as HTMLElement;
-                          const originalText = btn.textContent;
-                          btn.textContent = '복사됨!';
-                          setTimeout(() => btn.textContent = originalText, 1000);
-                        }}
-                        className="text-xs px-2 py-1 bg-gray-700 dark:bg-gray-600 text-gray-300 dark:text-gray-200 rounded hover:bg-gray-600 dark:hover:bg-gray-500 transition-colors self-start sm:self-auto"
-                      >
-                        📋 복사
-                      </button>
+                  <div className="space-y-3 mb-3">
+                    <div className="bg-gray-900 dark:bg-gray-800 text-green-400 dark:text-green-300 p-2 sm:p-3 rounded text-xs sm:text-sm font-mono overflow-hidden">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2">
+                        <span className="text-gray-400 dark:text-gray-500 text-xs">실행 코드:</span>
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(currentCard.code || '');
+                            const btn = document.activeElement as HTMLElement;
+                            const originalText = btn.textContent;
+                            btn.textContent = '복사됨!';
+                            setTimeout(() => btn.textContent = originalText, 1000);
+                          }}
+                          className="text-xs px-2 py-1 bg-gray-700 dark:bg-gray-600 text-gray-300 dark:text-gray-200 rounded hover:bg-gray-600 dark:hover:bg-gray-500 transition-colors self-start sm:self-auto"
+                        >
+                          📋 복사
+                        </button>
+                      </div>
+                      <pre className="whitespace-pre-wrap break-words">{currentCard.code}</pre>
                     </div>
-                    <pre className="whitespace-pre-wrap break-words">{currentCard.code}</pre>
+                    
+                    {/* 코드 한 줄씩 해설 */}
+                    <div className="bg-amber-50 dark:bg-amber-900/20 p-3 rounded border border-amber-200 dark:border-amber-800">
+                      <h4 className="font-medium text-amber-800 dark:text-amber-200 mb-3 flex items-center gap-2">
+                        📚 코드 해설
+                      </h4>
+                      <div className="space-y-2">
+                        {currentCard.code.split('\n').map((line, index) => {
+                          const analysis = analyzeCodeLine(line, index);
+                          return (
+                            <div key={index} className="text-sm">
+                              <div className="flex items-start gap-2">
+                                <span className="text-amber-600 dark:text-amber-400 font-mono text-xs bg-amber-100 dark:bg-amber-800 px-1 rounded">
+                                  {index + 1}
+                                </span>
+                                <div className="flex-1 min-w-0">
+                                  <code className="text-amber-900 dark:text-amber-100 font-mono text-xs bg-amber-100 dark:bg-amber-800 px-2 py-1 rounded">
+                                    {analysis.line || ' '}
+                                  </code>
+                                  <p className="text-amber-700 dark:text-amber-300 mt-1 text-xs">
+                                    {analysis.explanation}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
                   </div>
                 )}
-                
-                {/* 설명 */}
-                {currentCard.explanation && (
-                <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded border border-blue-200 dark:border-blue-800">
-                  <h4 className="font-medium text-blue-800 dark:text-blue-200 mb-1">💡 설명:</h4>
-                  <p className="text-blue-700 dark:text-blue-300 text-sm">{currentCard.explanation}</p>
+                  
+                  {/* 설명 */}
+                  {currentCard.explanation && (
+                    <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded border border-blue-200 dark:border-blue-800">
+                      <h4 className="font-medium text-blue-800 dark:text-blue-200 mb-1">💡 설명:</h4>
+                      <p className="text-blue-700 dark:text-blue-300 text-sm">{currentCard.explanation}</p>
+                    </div>
+                  )}
                 </div>
-                )}
-              </div>
-            )}
-
+              )}
+              
             {/* 네비게이션 */}
             <div className="flex flex-col sm:flex-row justify-between items-center pt-4 gap-3">
               <Button
@@ -402,8 +501,8 @@ export default function AiceQuizApp() {
                   </p>
                   <Button onClick={restartQuiz} className="bg-primary hover:bg-primary/90 w-full sm:w-auto text-sm">
                     🔄 다시 시작
-                  </Button>
-                </div>
+              </Button>
+            </div>
               ) : (
                 <Button
                   variant="default"
@@ -413,12 +512,12 @@ export default function AiceQuizApp() {
                 >
                   다음 →
                 </Button>
-              )}
-            </div>
+            )}
+          </div>
           </CardContent>
         </Card>
 
-        {/* 스와이프 힌트 */}
+          {/* 스와이프 힌트 */}
         <div className="text-center text-sm text-muted-foreground mt-4">
           💡 좌우로 스와이프하여 문제를 넘겨보세요
         </div>
