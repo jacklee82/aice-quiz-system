@@ -76,8 +76,12 @@ export default function AiceQuizApp() {
     setShowResult(true);
     setTotalAnswered(prev => prev + 1);
     
-    // 정답 확인 (첫 번째 옵션이 정답)
-    if (optionIndex === 0) {
+    // 정답 확인 - 선택한 옵션이 실제 정답과 일치하는지 확인
+    const options = getQuizOptions(currentCard);
+    const selectedOptionText = options[optionIndex];
+    const correctAnswer = currentCard.type === '코드' && currentCard.code ? currentCard.code : currentCard.answer;
+    
+    if (selectedOptionText === correctAnswer) {
       setScore(prev => prev + 1);
     }
   };
@@ -417,7 +421,8 @@ export default function AiceQuizApp() {
             <div className="space-y-3 w-full min-w-0">
               {getQuizOptions(currentCard).map((option, index) => {
                 const isSelected = selectedOption === index;
-                const isCorrect = index === 0; // 첫 번째 옵션이 정답
+                const correctAnswer = currentCard.type === '코드' && currentCard.code ? currentCard.code : currentCard.answer;
+                const isCorrect = option === correctAnswer; // 실제 정답과 비교
                 const showCorrect = showResult && isCorrect;
                 const showWrong = showResult && isSelected && !isCorrect;
 
