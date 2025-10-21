@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-	title: "AICE 카드북 - 모바일 학습 앱",
-	description: "AICE 자격증 준비를 위한 모바일 카드 학습 앱",
+	title: "퀴즈 앱 - 모바일 학습 앱",
+	description: "데이터 분석 학습을 위한 모바일 퀴즈 앱",
 	manifest: "/manifest.json",
 };
 

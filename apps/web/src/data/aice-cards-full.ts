@@ -4,7 +4,7 @@ export interface Hint {
   content: string;
 }
 
-// AICE 전체 카드 데이터 (HTML에서 파싱된 데이터)
+// 전체 카드 데이터 (HTML에서 파싱된 데이터)
 export interface AiceCard {
   id: string;
   type: '개념' | '코드' | '해석';
@@ -113,7 +113,7 @@ final_data = pd.concat(processed_data, ignore_index=True)`,
     id: '1-1',
     type: '개념',
     category: '라이브러리 임포트',
-    question: 'AICE에서 자주 쓰는 7대 라이브러리와 관례적 별칭은?',
+    question: '데이터 분석에서 자주 쓰는 7대 라이브러리와 관례적 별칭은?',
     answer: 'NumPy(np), Pandas(pd), Matplotlib.pyplot(plt), Seaborn(sns), scikit-learn(sklearn), TensorFlow(tf), XGBoost(xgb)',
     keywords: ['import', '별칭', '라이브러리'],
     difficulty: 'easy',

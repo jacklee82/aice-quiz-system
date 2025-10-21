@@ -336,7 +336,7 @@ export default function AiceQuizApp() {
       {/* 헤더 */}
         <div className="mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
-            <h1 className="text-2xl sm:text-3xl font-bold text-foreground">🎯 AICE 퀴즈</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground">🎯 퀴즈</h1>
                   <div className="flex flex-wrap items-center gap-2">
                     <Badge variant="outline" className="text-sm">
                       {score} / {totalAnswered}

@@ -1,4 +1,4 @@
-// HTML에서 AICE 카드 데이터를 추출하는 스크립트
+// HTML에서 카드 데이터를 추출하는 스크립트
 const fs = require('fs');
 const path = require('path');
 
@@ -85,7 +85,7 @@ const extractedCards = extractCards(htmlContent);
 console.log(`추출된 카드 수: ${extractedCards.length}`);
 
 // TypeScript 파일로 출력
-const tsContent = `// AICE 전체 카드 데이터 (HTML에서 자동 추출)
+const tsContent = `// 전체 카드 데이터 (HTML에서 자동 추출)
 export interface AiceCard {
   id: string;
   type: '개념' | '코드' | '해석';

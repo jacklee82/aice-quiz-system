@@ -1,4 +1,4 @@
-// HTML에서 AICE 카드 데이터를 추출하는 유틸리티
+// HTML에서 카드 데이터를 추출하는 유틸리티
 
 export interface ParsedCard {
   id: string;

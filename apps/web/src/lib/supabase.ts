@@ -5,7 +5,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-// AICE 카드 타입 정의
+// 카드 타입 정의
 export interface AiceCard {
   id: number;
   card_id: string;

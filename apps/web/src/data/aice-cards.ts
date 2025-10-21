@@ -1,4 +1,4 @@
-// AICE 퀴즈 카드 데이터 타입
+// 퀴즈 카드 데이터 타입
 export interface AiceCard {
   id: string;
   type: 'quiz';
