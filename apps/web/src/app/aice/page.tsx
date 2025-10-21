@@ -104,6 +104,16 @@ export default function AiceQuizApp() {
     const selectedOptionText = options[optionIndex];
     const correctAnswer = currentCard.type === '코드' && currentCard.code ? currentCard.code : currentCard.answer;
     
+    // 디버깅을 위한 콘솔 로그
+    console.log('=== 정답 판정 디버깅 ===');
+    console.log('선택한 옵션 인덱스:', optionIndex);
+    console.log('선택한 옵션 텍스트:', selectedOptionText);
+    console.log('정답:', correctAnswer);
+    console.log('일치 여부:', selectedOptionText === correctAnswer);
+    console.log('선택한 옵션 길이:', selectedOptionText?.length);
+    console.log('정답 길이:', correctAnswer?.length);
+    console.log('========================');
+    
     if (selectedOptionText === correctAnswer) {
       setScore(prev => prev + 1);
     }
@@ -484,7 +494,7 @@ export default function AiceQuizApp() {
               <div className="text-right">
                 <span className="text-xs text-muted-foreground">
                   문제 {currentCardIndex + 1}
-                </span>
+              </span>
                 <div className="text-xs text-muted-foreground mt-1">
                   ← 스와이프 →
                 </div>
