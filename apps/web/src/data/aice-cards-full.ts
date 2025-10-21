@@ -2180,14 +2180,9 @@ export const generateQuizOptions = (card: AiceCard): string[] => {
     options.push(wrongAnswer);
   }
   
-  // 4개 옵션으로 맞추기
-  while (options.length < 4) {
-    options.push('다른 답안');
-  }
-  
-  // 중복 제거 및 순서 섞기
+  // 2개 선택지만 반환 (정답 + 오답 1개)
   const uniqueOptions = [...new Set(options)];
   const shuffled = uniqueOptions.sort(() => Math.random() - 0.5);
   
-  return shuffled.slice(0, 4);
+  return shuffled.slice(0, 2);
 };
