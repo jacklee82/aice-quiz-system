@@ -160,15 +160,19 @@ from sklearn.metrics import accuracy_score`,
   },
   {
     id: '2-2',
-    type: '코드',
-    category: '데이터 불러오기',
-    question: 'Excel 파일을 읽는 1줄 코드는?',
-    answer: '시트 인덱스와 엔진을 명시하여 Excel 파일을 읽는다.',
-    code: `df = pd.read_excel('data.xlsx', sheet_name=0, engine='openpyxl')`,
-    keywords: ['Excel', 'openpyxl', 'sheet_name', 'engine'],
-    difficulty: 'easy',
-    explanation: 'xlsx 파일은 openpyxl 엔진이 필요하며, 시트를 명시해야 합니다.',
-    section: 'type-2'
+    type: '개념',
+    category: '실무 상황',
+    question: '대용량 Excel 파일(50MB)을 읽을 때 메모리 부족 오류가 발생합니다. 해결 방법은?',
+    answer: '1) 엔진을 openpyxl 대신 xlrd 사용, 2) 필요한 컬럼만 선택하여 읽기, 3) 청크 단위로 읽기, 4) 데이터 타입을 미리 지정하여 메모리 절약',
+    keywords: ['Excel', '메모리', '대용량', '최적화'],
+    difficulty: 'hard',
+    explanation: 'Excel 파일은 메모리 집약적입니다. 필요한 데이터만 선택하고 적절한 데이터 타입을 사용하면 메모리 사용량을 크게 줄일 수 있습니다.',
+    section: 'scenario',
+    hints: [
+      { type: 'library', content: 'pandas - read_excel()의 usecols, dtype 파라미터' },
+      { type: 'concept', content: '메모리 최적화: 필요한 컬럼만 선택, 적절한 데이터 타입 사용' },
+      { type: 'tip', content: 'object 타입 대신 category 타입을 사용하면 메모리를 절약할 수 있습니다.' }
+    ]
   },
   {
     id: '2-3',
@@ -670,17 +674,20 @@ X_train_scaled = scaler.fit_transform(X_train); X_test_scaled = scaler.transform
   },
   {
     id: '10-3',
-    type: '코드',
-    category: '기본 모델링',
-    question: 'LogisticRegression 3줄?',
-    answer: '로지스틱 회귀 모델을 학습한다.',
-    code: `from sklearn.linear_model import LogisticRegression
-lr = LogisticRegression(max_iter=1000)
-lr.fit(X_train, y_train)`,
-    keywords: ['LogisticRegression', 'max_iter', 'fit'],
-    difficulty: 'medium',
-    explanation: '분류 문제의 기본 모델 중 하나입니다.',
-    section: 'type-10'
+    type: '개념',
+    category: '실무 상황',
+    question: '고객 이탈 예측 모델을 만들었는데 정확도는 95%이지만 실제 비즈니스에서는 도움이 되지 않습니다. 원인과 해결책은?',
+    answer: '불균형 데이터셋 문제입니다. 정확도는 높지만 실제 이탈 고객을 제대로 예측하지 못합니다. 해결책: 1) SMOTE로 오버샘플링, 2) 적절한 평가 지표 사용(Precision, Recall, F1), 3) 비용 민감 학습 적용',
+    keywords: ['불균형', 'SMOTE', 'Precision', 'Recall', '비즈니스'],
+    difficulty: 'hard',
+    explanation: '불균형 데이터에서는 정확도보다 Precision, Recall, F1-score가 더 중요한 지표입니다. 비즈니스 관점에서 실제 이탈 고객을 얼마나 잘 찾아내는지가 핵심입니다.',
+    section: 'scenario',
+    hints: [
+      { type: 'concept', content: '불균형 데이터: 한 클래스가 다른 클래스보다 훨씬 많은 경우' },
+      { type: 'library', content: 'imbalanced-learn - SMOTE, RandomOverSampler' },
+      { type: 'library', content: 'sklearn - classification_report, confusion_matrix' },
+      { type: 'tip', content: '비즈니스 관점에서 False Negative(이탈 고객을 놓침)가 더 큰 손실입니다.' }
+    ]
   },
 
   // 추가 앙상블 모델링 카드들
