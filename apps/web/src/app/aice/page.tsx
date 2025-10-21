@@ -102,21 +102,9 @@ export default function AiceQuizApp() {
     // 정답 확인 - 선택한 옵션이 실제 정답과 일치하는지 확인
     const options = getQuizOptions(currentCard);
     const selectedOptionText = options[optionIndex];
+    // 코드 타입은 code 필드, 개념 타입은 answer 필드를 정답으로 사용
     const correctAnswer = currentCard.type === '코드' && currentCard.code ? currentCard.code : currentCard.answer;
     
-    // 디버깅 로그
-    console.log('=== 정답 판정 디버깅 ===');
-    console.log('카드 ID:', currentCard.id);
-    console.log('카드 질문:', currentCard.question);
-    console.log('카드 타입:', currentCard.type);
-    console.log('카드 정답:', currentCard.answer);
-    console.log('카드 코드:', currentCard.code);
-    console.log('생성된 옵션들:', options);
-    console.log('선택한 옵션 인덱스:', optionIndex);
-    console.log('선택한 옵션 텍스트:', selectedOptionText);
-    console.log('정답으로 판정할 텍스트:', correctAnswer);
-    console.log('일치 여부:', selectedOptionText === correctAnswer);
-    console.log('========================');
     
     if (selectedOptionText === correctAnswer) {
       setScore(prev => prev + 1);
@@ -619,14 +607,23 @@ export default function AiceQuizApp() {
                     {selectedOption === 0 ? '🎉' : '😅'}
                     </span>
                   <h3 className="font-medium text-foreground">
-                    {selectedOption === 0 ? '정답입니다!' : '틀렸습니다.'}
-                    </h3>
+                    {(() => {
+                      const options = getQuizOptions(currentCard);
+                      const selectedOptionText = options[selectedOption];
+                      const correctAnswer = currentCard.type === '코드' && currentCard.code ? currentCard.code : currentCard.answer;
+                      return selectedOptionText === correctAnswer ? '정답입니다!' : '틀렸습니다.';
+                    })()}
+                  </h3>
                   </div>
                   
                   {/* 정답 표시 */}
                   <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded mb-3 border border-green-200 dark:border-green-800">
                     <h4 className="font-medium text-green-800 dark:text-green-200 mb-2">✅ 정답:</h4>
-                  <p className="text-green-700 dark:text-green-300 text-sm">{currentCard.answer}</p>
+                    {currentCard.type === '코드' && currentCard.code ? (
+                      <pre className="text-green-700 dark:text-green-300 text-sm whitespace-pre-wrap break-words overflow-hidden">{currentCard.code}</pre>
+                    ) : (
+                      <p className="text-green-700 dark:text-green-300 text-sm">{currentCard.answer}</p>
+                    )}
                   </div>
                   
                   {/* 코드 블록 (코드 카드인 경우) */}

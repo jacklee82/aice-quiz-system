@@ -2213,80 +2213,45 @@ export const getSections = () => {
   return [...new Set(aiceCards.map(card => card.section))];
 };
 
-// 퀴즈 옵션 생성 (안정적인 버전)
+// 퀴즈 옵션 생성 (완전히 결정론적 버전)
 export const generateQuizOptions = (card: AiceCard): string[] => {
-  console.log('=== 옵션 생성 디버깅 ===');
-  console.log('카드 ID:', card.id);
-  console.log('카드 타입:', card.type);
-  console.log('카드 정답:', card.answer);
-  console.log('카드 코드:', card.code);
+  // 정답 결정
+  const correctAnswer = card.type === '코드' && card.code ? card.code : card.answer;
   
-  const options: string[] = [];
-  
-  // 정답 추가
-  if (card.type === '코드' && card.code) {
-    options.push(card.code);
-    console.log('코드 타입 - 정답 추가:', card.code);
-  } else {
-    options.push(card.answer);
-    console.log('개념 타입 - 정답 추가:', card.answer);
-  }
-  
-  // 카드 ID를 기반으로 일관된 오답 생성
+  // 오답 생성 - 카드 ID를 기반으로 완전히 결정론적
   const cardIdHash = card.id.split('-').reduce((acc, part) => acc + part.charCodeAt(0), 0);
+  
+  // 같은 카테고리의 다른 카드들 찾기
   const similarCards = aiceCards.filter(c => 
     c.type === card.type && 
     c.category === card.category && 
     c.id !== card.id
   );
   
-  console.log('비슷한 카드 수:', similarCards.length);
-  console.log('카드 ID 해시:', cardIdHash);
+  let wrongAnswer: string;
   
   if (similarCards.length > 0) {
-    // 카드 ID 해시를 사용하여 일관된 선택
+    // 카드 ID 해시를 사용하여 일관된 선택 (랜덤 없음)
     const selectedIndex = cardIdHash % similarCards.length;
     const selectedCard = similarCards[selectedIndex];
     
-    console.log('선택된 카드 인덱스:', selectedIndex);
-    console.log('선택된 카드 ID:', selectedCard.id);
-    
-    if (selectedCard.type === '코드' && selectedCard.code) {
-      options.push(selectedCard.code);
-      console.log('선택된 카드 코드:', selectedCard.code);
-    } else {
-      options.push(selectedCard.answer);
-      console.log('선택된 카드 정답:', selectedCard.answer);
-    }
+    wrongAnswer = selectedCard.type === '코드' && selectedCard.code 
+      ? selectedCard.code 
+      : selectedCard.answer;
   } else {
     // 비슷한 카드가 없으면 간단한 변형 사용
     if (card.type === '코드' && card.code) {
-      const wrongCode = card.code
+      wrongAnswer = card.code
         .replace(/import/g, 'from')
         .replace(/as np/g, 'as numpy')
         .replace(/as pd/g, 'as pandas');
-      options.push(wrongCode);
-      console.log('생성된 오답 코드:', wrongCode);
     } else {
-      const wrongAnswer = card.answer
+      wrongAnswer = card.answer
         .replace(/핵심:/g, '주의:')
         .replace(/근거:/g, '이유:');
-      options.push(wrongAnswer);
-      console.log('생성된 오답 정답:', wrongAnswer);
     }
   }
   
-  // 2개 선택지만 반환 (정답 + 오답 1개)
-  const uniqueOptions = [...new Set(options)];
-  
-  // 정답을 항상 첫 번째에 배치
-  const correctAnswer = card.type === '코드' && card.code ? card.code : card.answer;
-  const wrongAnswer = uniqueOptions.find(opt => opt !== correctAnswer);
-  
-  const finalOptions = [correctAnswer, wrongAnswer].filter(Boolean);
-  
-  console.log('최종 옵션들:', finalOptions);
-  console.log('========================');
-  
-  return finalOptions;
+  // 정답을 항상 첫 번째에 배치 (일관성 보장)
+  return [correctAnswer, wrongAnswer];
 };
