@@ -1482,7 +1482,8 @@ model.add(Dropout(0.5))`,
     type: '코드',
     category: '딥러닝 모델 구성',
     question: 'BatchNormalization 추가 2줄?',
-    answer: '모델에 BatchNormalization 레이어를 추가한다.',
+    answer: `from tensorflow.keras.layers import BatchNormalization
+model.add(BatchNormalization())`,
     code: `from tensorflow.keras.layers import BatchNormalization
 model.add(BatchNormalization())`,
     keywords: ['BatchNormalization'],
