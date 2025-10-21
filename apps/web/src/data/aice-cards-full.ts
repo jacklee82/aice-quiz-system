@@ -980,13 +980,18 @@ plt.show()`,
   {
     id: '4-3',
     type: '개념',
-    category: '그룹화 및 집계',
-    question: 'value_counts() 사용법은?',
-    answer: '범주형 데이터의 빈도를 계산한다.',
-    keywords: ['value_counts', '빈도', '범주형'],
-    difficulty: 'easy',
-    explanation: '범주형 데이터의 분포를 파악하는 기본 방법입니다.',
-    section: 'type-4'
+    category: '실무 상황',
+    question: '고객 데이터에서 카테고리별 구매 빈도를 분석하려고 하는데, 일부 카테고리는 빈도가 너무 적어서 노이즈가 됩니다. 어떻게 처리해야 할까요?',
+    answer: 'value_counts()로 빈도를 확인한 후, 임계값 이하의 카테고리는 "기타"로 통합하거나 제거합니다. normalize=True로 비율도 함께 확인하여 데이터 품질을 평가합니다.',
+    keywords: ['value_counts', '노이즈', '임계값', '데이터품질'],
+    difficulty: 'hard',
+    explanation: '실제 데이터에서는 소수 카테고리가 모델 성능을 저하시킬 수 있습니다. 적절한 임계값 설정과 데이터 정제가 중요합니다.',
+    section: 'scenario',
+    hints: [
+      { type: 'library', content: 'pandas - value_counts(normalize=True)로 비율 확인' },
+      { type: 'concept', content: '임계값 설정: 전체 데이터의 1-5% 이하 카테고리 처리' },
+      { type: 'tip', content: 'value_counts().head(10)으로 상위 카테고리만 확인할 수 있습니다.' }
+    ]
   },
   {
     id: '4-4',
