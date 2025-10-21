@@ -126,40 +126,47 @@ export default function AiceQuizApp() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <div className="max-w-2xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-2 sm:p-4">
+      <div className="max-w-2xl mx-auto w-full">
         {/* 헤더 */}
         <div className="mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="text-3xl font-bold text-gray-800">🎯 AICE 퀴즈</h1>
-                  <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">🎯 AICE 퀴즈</h1>
+                  <div className="flex flex-wrap items-center gap-2">
                     <Badge variant="outline" className="text-sm">
                       {score} / {totalAnswered}
                     </Badge>
                     <Button
                       variant={isRandomMode ? "default" : "outline"}
                       size="sm"
+                      className="text-xs px-2 py-1"
                       onClick={() => setIsRandomMode(!isRandomMode)}
                     >
-                      🎲 랜덤
+                      🎲
                     </Button>
                     <Button
                       variant="outline"
                       size="sm"
+                      className="text-xs px-2 py-1"
                       onClick={() => setShowFilters(!showFilters)}
                     >
-                      🔍 필터
+                      🔍
                     </Button>
-                    <Button variant="outline" size="sm" onClick={restartQuiz}>
-                      🔄 재시작
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-xs px-2 py-1"
+                      onClick={restartQuiz}
+                    >
+                      🔄
                     </Button>
                   </div>
           </div>
           
           {/* 필터링 옵션 */}
           {showFilters && (
-            <div className="bg-gray-50 p-4 rounded-lg mb-4">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="bg-gray-50 p-3 sm:p-4 rounded-lg mb-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     카테고리
@@ -253,20 +260,20 @@ export default function AiceQuizApp() {
 
         {/* 퀴즈 카드 */}
         <Card className="shadow-lg">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Badge variant="secondary">{currentCard.category}</Badge>
-                <Badge variant="outline" className={
+          <CardHeader className="pb-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge variant="secondary" className="text-xs">{currentCard.category}</Badge>
+                <Badge variant="outline" className={`text-xs ${
                   currentCard.difficulty === 'easy' ? 'text-green-600 border-green-200' :
                   currentCard.difficulty === 'medium' ? 'text-yellow-600 border-yellow-200' :
                   'text-red-600 border-red-200'
-                }>
+                }`}>
                   {currentCard.difficulty === 'easy' ? '쉬움' : 
                    currentCard.difficulty === 'medium' ? '보통' : '어려움'}
                 </Badge>
               </div>
-              <span className="text-sm text-gray-500">
+              <span className="text-xs text-gray-500">
                 문제 {currentCardIndex + 1}
               </span>
             </div>
@@ -275,7 +282,7 @@ export default function AiceQuizApp() {
           <CardContent className="space-y-6">
             {/* 질문 */}
             <div>
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4 break-words">
                 {currentCard.question}
               </h2>
             </div>
@@ -292,7 +299,7 @@ export default function AiceQuizApp() {
                   <Button
                     key={index}
                     variant="outline"
-                    className={`w-full justify-start p-4 h-auto text-left ${
+                    className={`w-full justify-start p-3 sm:p-4 h-auto text-left ${
                       !showResult 
                         ? 'hover:bg-blue-50 hover:border-blue-300' 
                         : showCorrect
@@ -304,17 +311,17 @@ export default function AiceQuizApp() {
                     onClick={() => handleOptionSelect(index)}
                     disabled={selectedOption !== null}
                   >
-                    <div className="flex items-center justify-between w-full">
-                      <div className="flex-1">
-                        <div className="font-medium mb-2">
+                    <div className="flex items-start justify-between w-full min-w-0">
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium mb-2 text-sm">
                           {String.fromCharCode(65 + index)}.
                         </div>
-                        <pre className="bg-gray-100 dark:bg-gray-800 p-3 rounded text-sm font-mono whitespace-pre-wrap overflow-x-auto">
+                        <pre className="bg-gray-100 dark:bg-gray-800 p-2 sm:p-3 rounded text-xs sm:text-sm font-mono whitespace-pre-wrap break-words overflow-hidden">
                           {option}
                         </pre>
                       </div>
                       {showResult && (
-                        <span className="text-lg ml-2">
+                        <span className="text-lg ml-2 flex-shrink-0">
                           {showCorrect ? '✅' : showWrong ? '❌' : ''}
                         </span>
                       )}
@@ -344,8 +351,8 @@ export default function AiceQuizApp() {
                 
                 {/* 코드 블록 (코드 카드인 경우) */}
                 {currentCard.type === '코드' && currentCard.code && (
-                  <div className="bg-gray-900 text-green-400 p-3 rounded text-sm font-mono overflow-x-auto mb-3">
-                    <div className="flex items-center justify-between mb-2">
+                  <div className="bg-gray-900 text-green-400 p-2 sm:p-3 rounded text-xs sm:text-sm font-mono overflow-hidden mb-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2">
                       <span className="text-gray-400 text-xs">실행 코드:</span>
                       <button
                         onClick={() => {
@@ -355,12 +362,12 @@ export default function AiceQuizApp() {
                           btn.textContent = '복사됨!';
                           setTimeout(() => btn.textContent = originalText, 1000);
                         }}
-                        className="text-xs px-2 py-1 bg-gray-700 text-gray-300 rounded hover:bg-gray-600 transition-colors"
+                        className="text-xs px-2 py-1 bg-gray-700 text-gray-300 rounded hover:bg-gray-600 transition-colors self-start sm:self-auto"
                       >
                         📋 복사
                       </button>
                     </div>
-                    <pre className="whitespace-pre-wrap">{currentCard.code}</pre>
+                    <pre className="whitespace-pre-wrap break-words">{currentCard.code}</pre>
                   </div>
                 )}
                 
@@ -375,9 +382,10 @@ export default function AiceQuizApp() {
             )}
 
             {/* 네비게이션 */}
-            <div className="flex justify-between items-center pt-4">
+            <div className="flex flex-col sm:flex-row justify-between items-center pt-4 gap-3">
               <Button
                 variant="outline"
+                className="w-full sm:w-auto text-sm"
                 onClick={prevQuestion}
                 disabled={currentCardIndex === 0}
               >
@@ -392,13 +400,14 @@ export default function AiceQuizApp() {
                   <p className="text-gray-600 mb-4">
                     점수: {score} / {totalAnswered} ({Math.round((score / totalAnswered) * 100)}%)
                   </p>
-                  <Button onClick={restartQuiz} className="bg-blue-600 hover:bg-blue-700">
+                  <Button onClick={restartQuiz} className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto text-sm">
                     🔄 다시 시작
                   </Button>
                 </div>
               ) : (
                 <Button
                   variant="default"
+                  className="w-full sm:w-auto text-sm"
                   onClick={nextQuestion}
                   disabled={currentCardIndex === shuffledCards.length - 1 || selectedOption === null}
                 >
