@@ -120,66 +120,124 @@ export default function AiceQuizApp() {
     
     // 빈 줄 처리
     if (!trimmedLine) {
-      return { line, explanation: '빈 줄' };
+      return { line, explanation: '빈 줄 - 코드의 가독성을 위한 공백' };
     }
 
     // import 문 분석
     if (trimmedLine.startsWith('import ')) {
       if (trimmedLine.includes('numpy')) {
-        return { line, explanation: 'NumPy 라이브러리를 np라는 별칭으로 가져옵니다. 수치 계산과 배열 연산을 위한 핵심 라이브러리입니다.' };
+        return { line, explanation: 'NumPy 라이브러리를 np라는 별칭으로 가져옵니다. 수치 계산과 배열 연산을 위한 핵심 라이브러리로, 데이터 사이언스의 기초가 됩니다.' };
       } else if (trimmedLine.includes('pandas')) {
-        return { line, explanation: 'Pandas 라이브러리를 pd라는 별칭으로 가져옵니다. 데이터 분석과 조작을 위한 라이브러리입니다.' };
+        return { line, explanation: 'Pandas 라이브러리를 pd라는 별칭으로 가져옵니다. 데이터 분석과 조작을 위한 라이브러리로, 데이터프레임을 통해 구조화된 데이터를 처리합니다.' };
       } else if (trimmedLine.includes('matplotlib')) {
-        return { line, explanation: 'Matplotlib 라이브러리를 가져옵니다. 그래프와 차트를 그리기 위한 시각화 라이브러리입니다.' };
+        return { line, explanation: 'Matplotlib 라이브러리를 가져옵니다. 그래프와 차트를 그리기 위한 시각화 라이브러리로, 데이터의 패턴을 시각적으로 표현합니다.' };
       } else if (trimmedLine.includes('seaborn')) {
-        return { line, explanation: 'Seaborn 라이브러리를 가져옵니다. 통계적 데이터 시각화를 위한 고급 라이브러리입니다.' };
+        return { line, explanation: 'Seaborn 라이브러리를 가져옵니다. 통계적 데이터 시각화를 위한 고급 라이브러리로, matplotlib보다 더 아름다운 그래프를 쉽게 만들 수 있습니다.' };
       } else if (trimmedLine.includes('sklearn')) {
-        return { line, explanation: 'Scikit-learn 라이브러리를 가져옵니다. 머신러닝 알고리즘과 도구들을 제공하는 라이브러리입니다.' };
+        return { line, explanation: 'Scikit-learn 라이브러리를 가져옵니다. 머신러닝 알고리즘과 도구들을 제공하는 라이브러리로, 예측 모델링의 핵심 도구입니다.' };
+      } else if (trimmedLine.includes('xgboost')) {
+        return { line, explanation: 'XGBoost 라이브러리를 가져옵니다. 그래디언트 부스팅 알고리즘을 구현한 고성능 머신러닝 라이브러리입니다.' };
       } else {
-        return { line, explanation: '외부 라이브러리를 가져오는 import 문입니다.' };
+        return { line, explanation: '외부 라이브러리를 가져오는 import 문입니다. 필요한 기능을 코드에서 사용할 수 있게 합니다.' };
       }
     }
 
     // 변수 할당 분석
     if (trimmedLine.includes('=') && !trimmedLine.includes('==') && !trimmedLine.includes('!=')) {
       if (trimmedLine.includes('np.')) {
-        return { line, explanation: 'NumPy 함수를 사용하여 변수에 값을 할당합니다. NumPy는 고성능 수치 계산을 제공합니다.' };
+        if (trimmedLine.includes('array')) {
+          return { line, explanation: 'NumPy 배열을 생성합니다. 배열은 동일한 타입의 데이터를 효율적으로 저장하고 연산할 수 있는 자료구조입니다.' };
+        } else if (trimmedLine.includes('zeros')) {
+          return { line, explanation: '모든 원소가 0인 NumPy 배열을 생성합니다. 초기화된 배열을 만들 때 자주 사용됩니다.' };
+        } else if (trimmedLine.includes('ones')) {
+          return { line, explanation: '모든 원소가 1인 NumPy 배열을 생성합니다. 특정 값으로 초기화된 배열을 만들 때 사용됩니다.' };
+        } else if (trimmedLine.includes('arange')) {
+          return { line, explanation: '일정한 간격의 숫자들을 가진 배열을 생성합니다. 수열을 만들 때 유용합니다.' };
+        } else if (trimmedLine.includes('linspace')) {
+          return { line, explanation: '시작값과 끝값 사이를 균등하게 나눈 배열을 생성합니다. 연속적인 값들을 만들 때 사용됩니다.' };
+        } else {
+          return { line, explanation: 'NumPy 함수를 사용하여 배열이나 수치 계산 결과를 변수에 저장합니다. NumPy는 고성능 수치 계산을 제공합니다.' };
+        }
       } else if (trimmedLine.includes('pd.')) {
-        return { line, explanation: 'Pandas 함수를 사용하여 데이터프레임이나 시리즈를 생성합니다. 데이터 분석의 핵심 객체입니다.' };
+        if (trimmedLine.includes('DataFrame')) {
+          return { line, explanation: 'Pandas DataFrame을 생성합니다. DataFrame은 행과 열로 구성된 2차원 데이터 구조로, 엑셀과 유사한 형태입니다.' };
+        } else if (trimmedLine.includes('read_csv')) {
+          return { line, explanation: 'CSV 파일을 읽어서 DataFrame으로 변환합니다. 데이터 분석의 첫 번째 단계로, 외부 데이터를 불러올 때 사용됩니다.' };
+        } else if (trimmedLine.includes('read_excel')) {
+          return { line, explanation: 'Excel 파일을 읽어서 DataFrame으로 변환합니다. 스프레드시트 형태의 데이터를 처리할 때 사용됩니다.' };
+        } else {
+          return { line, explanation: 'Pandas 함수를 사용하여 데이터프레임이나 시리즈를 생성합니다. 데이터 분석의 핵심 객체입니다.' };
+        }
       } else if (trimmedLine.includes('plt.')) {
-        return { line, explanation: 'Matplotlib의 pyplot을 사용하여 그래프를 그립니다. 시각화의 기본 도구입니다.' };
+        if (trimmedLine.includes('plot')) {
+          return { line, explanation: 'Matplotlib을 사용하여 선 그래프를 그립니다. 데이터의 변화 추이를 시각화할 때 사용됩니다.' };
+        } else if (trimmedLine.includes('scatter')) {
+          return { line, explanation: '산점도를 그립니다. 두 변수 간의 관계를 시각적으로 확인할 때 사용됩니다.' };
+        } else if (trimmedLine.includes('hist')) {
+          return { line, explanation: '히스토그램을 그립니다. 데이터의 분포를 시각화할 때 사용됩니다.' };
+        } else if (trimmedLine.includes('show')) {
+          return { line, explanation: '그래프를 화면에 표시합니다. 시각화 작업의 마지막 단계입니다.' };
+        } else {
+          return { line, explanation: 'Matplotlib의 pyplot을 사용하여 그래프를 그립니다. 데이터 시각화의 기본 도구입니다.' };
+        }
+      } else if (trimmedLine.includes('sns.')) {
+        return { line, explanation: 'Seaborn을 사용하여 고급 시각화를 수행합니다. 통계적 그래프를 쉽게 만들 수 있습니다.' };
+      } else if (trimmedLine.includes('sklearn')) {
+        return { line, explanation: 'Scikit-learn의 머신러닝 모델을 사용합니다. 예측 모델을 구축하고 훈련시킬 때 사용됩니다.' };
       } else {
-        return { line, explanation: '변수에 값을 할당하는 문장입니다.' };
+        return { line, explanation: '변수에 값을 할당합니다. 계산 결과나 데이터를 저장하여 나중에 사용할 수 있게 합니다.' };
       }
     }
 
     // 함수 정의 분석
     if (trimmedLine.startsWith('def ')) {
-      return { line, explanation: '함수를 정의합니다. 재사용 가능한 코드 블록을 만듭니다.' };
+      return { line, explanation: '함수를 정의합니다. 재사용 가능한 코드 블록을 만들어 코드의 가독성과 유지보수성을 높입니다.' };
     }
 
     // 반복문 분석
-    if (trimmedLine.startsWith('for ') || trimmedLine.startsWith('while ')) {
-      return { line, explanation: '반복문을 시작합니다. 조건에 따라 코드를 반복 실행합니다.' };
+    if (trimmedLine.startsWith('for ')) {
+      return { line, explanation: 'for 반복문을 시작합니다. 리스트나 배열의 각 요소에 대해 반복적으로 작업을 수행합니다.' };
+    } else if (trimmedLine.startsWith('while ')) {
+      return { line, explanation: 'while 반복문을 시작합니다. 조건이 참인 동안 계속 반복 실행합니다.' };
     }
 
     // 조건문 분석
-    if (trimmedLine.startsWith('if ') || trimmedLine.startsWith('elif ') || trimmedLine.startsWith('else:')) {
-      return { line, explanation: '조건문입니다. 특정 조건에 따라 다른 코드를 실행합니다.' };
+    if (trimmedLine.startsWith('if ')) {
+      return { line, explanation: 'if 조건문을 시작합니다. 특정 조건이 참일 때만 코드를 실행합니다.' };
+    } else if (trimmedLine.startsWith('elif ')) {
+      return { line, explanation: 'elif 조건문입니다. 이전 조건이 거짓이고 현재 조건이 참일 때 실행됩니다.' };
+    } else if (trimmedLine.startsWith('else:')) {
+      return { line, explanation: 'else 절입니다. 모든 조건이 거짓일 때 실행되는 기본 동작을 정의합니다.' };
     }
 
     // return 문 분석
     if (trimmedLine.startsWith('return ')) {
-      return { line, explanation: '함수에서 값을 반환합니다. 함수의 결과를 호출한 곳으로 전달합니다.' };
+      return { line, explanation: '함수에서 값을 반환합니다. 함수의 계산 결과를 호출한 곳으로 전달하여 재사용할 수 있게 합니다.' };
     }
 
     // print 문 분석
     if (trimmedLine.startsWith('print(')) {
-      return { line, explanation: '화면에 결과를 출력합니다. 디버깅이나 결과 확인에 사용됩니다.' };
+      return { line, explanation: '결과를 화면에 출력합니다. 디버깅이나 최종 결과 확인에 사용되며, 사용자에게 정보를 전달합니다.' };
     }
 
-    // 기본 설명
-    return { line, explanation: `코드의 ${index + 1}번째 줄입니다.` };
+    // try-except 분석
+    if (trimmedLine.startsWith('try:')) {
+      return { line, explanation: 'try 블록을 시작합니다. 오류가 발생할 수 있는 코드를 안전하게 실행하기 위해 사용됩니다.' };
+    } else if (trimmedLine.startsWith('except')) {
+      return { line, explanation: 'except 블록입니다. try 블록에서 오류가 발생했을 때 실행되는 예외 처리 코드입니다.' };
+    }
+
+    // 주석 분석
+    if (trimmedLine.startsWith('#')) {
+      return { line, explanation: '주석입니다. 코드의 동작을 설명하거나 개발자에게 정보를 전달합니다.' };
+    }
+
+    // 기본 설명 - 더 구체적으로
+    if (trimmedLine.includes('(') && trimmedLine.includes(')')) {
+      return { line, explanation: '함수나 메서드를 호출합니다. 특정 기능을 수행하기 위해 미리 정의된 코드를 실행합니다.' };
+    }
+
+    return { line, explanation: '코드 실행을 위한 문장입니다. 프로그램의 로직을 구성하는 기본 단위입니다.' };
   };
 
   if (shuffledCards.length === 0) {
