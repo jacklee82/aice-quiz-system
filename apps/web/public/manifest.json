@@ -1,0 +1,17 @@
+{
+  "name": "AICE 카드북",
+  "short_name": "AICE Cards",
+  "description": "AICE 자격증 준비를 위한 모바일 카드 학습 앱",
+  "start_url": "/aice",
+  "display": "standalone",
+  "background_color": "#f0f9ff",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait",
+  "icons": [],
+  "categories": ["education", "productivity"],
+  "lang": "ko",
+  "dir": "ltr"
+}
+
+
+
