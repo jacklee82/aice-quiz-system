@@ -183,7 +183,7 @@ export function useSupabaseProgress() {
         .lte('next_review', now);
 
       if (error) throw error;
-      return data?.map((item: StudyProgress) => item.card_id) || [];
+      return data?.map((item: { card_id: string }) => item.card_id) || [];
     } catch (err) {
       setError(err instanceof Error ? err.message : '복습 카드를 불러오는데 실패했습니다.');
       return [];
