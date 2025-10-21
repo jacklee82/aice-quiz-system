@@ -1481,14 +1481,14 @@ model.add(Dropout(0.5))`,
     id: '13-7',
     type: '코드',
     category: '딥러닝 모델 구성',
-    question: 'BatchNormalization 추가 2줄?',
+    question: '딥러닝 모델에서 학습이 불안정할 때 BatchNormalization을 추가하려면?',
     answer: `from tensorflow.keras.layers import BatchNormalization
 model.add(BatchNormalization())`,
     code: `from tensorflow.keras.layers import BatchNormalization
 model.add(BatchNormalization())`,
-    keywords: ['BatchNormalization'],
+    keywords: ['BatchNormalization', '학습안정성', '딥러닝'],
     difficulty: 'hard',
-    explanation: '학습 안정성을 높이는 BatchNormalization 레이어입니다.',
+    explanation: 'BatchNormalization은 각 레이어의 입력을 정규화하여 학습 안정성을 높이고 수렴 속도를 개선합니다.',
     section: 'type-13'
   },
 
