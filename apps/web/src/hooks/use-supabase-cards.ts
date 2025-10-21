@@ -94,7 +94,7 @@ export function useSupabaseCards() {
 
       if (error) throw error;
       
-      const categories = Array.from(new Set(data?.map(item => item.category) || []));
+      const categories = Array.from(new Set(data?.map((item: AiceCard) => item.category) || []));
       return categories;
     } catch (err) {
       setError(err instanceof Error ? err.message : '카테고리를 불러오는데 실패했습니다.');
