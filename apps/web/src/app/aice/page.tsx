@@ -116,10 +116,10 @@ export default function AiceQuizApp() {
 
   if (shuffledCards.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">퀴즈를 준비하는 중...</p>
+          <p className="text-muted-foreground">퀴즈를 준비하는 중...</p>
         </div>
       </div>
     );
@@ -219,7 +219,7 @@ export default function AiceQuizApp() {
 
                 {isRandomMode && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-2">
                       문제 개수
                     </label>
                     <select
@@ -265,9 +265,9 @@ export default function AiceQuizApp() {
               <div className="flex flex-wrap items-center gap-2">
                 <Badge variant="secondary" className="text-xs">{currentCard.category}</Badge>
                 <Badge variant="outline" className={`text-xs ${
-                  currentCard.difficulty === 'easy' ? 'text-green-600 border-green-200' :
-                  currentCard.difficulty === 'medium' ? 'text-yellow-600 border-yellow-200' :
-                  'text-red-600 border-red-200'
+                  currentCard.difficulty === 'easy' ? 'text-green-600 dark:text-green-400 border-green-200 dark:border-green-800' :
+                  currentCard.difficulty === 'medium' ? 'text-yellow-600 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800' :
+                  'text-red-600 dark:text-red-400 border-red-200 dark:border-red-800'
                 }`}>
                   {currentCard.difficulty === 'easy' ? '쉬움' : 
                    currentCard.difficulty === 'medium' ? '보통' : '어려움'}
@@ -301,12 +301,12 @@ export default function AiceQuizApp() {
                     variant="outline"
                     className={`w-full justify-start p-3 sm:p-4 h-auto text-left ${
                       !showResult 
-                        ? 'hover:bg-blue-50 hover:border-blue-300' 
+                        ? 'hover:bg-primary/10 hover:border-primary/30' 
                         : showCorrect
-                        ? 'border-green-500 bg-green-50 text-green-800'
+                        ? 'border-green-500 bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200'
                         : showWrong
-                        ? 'border-red-500 bg-red-50 text-red-800'
-                        : 'border-gray-200'
+                        ? 'border-red-500 bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200'
+                        : 'border-border'
                     }`}
                     onClick={() => handleOptionSelect(index)}
                     disabled={selectedOption !== null}
@@ -351,9 +351,9 @@ export default function AiceQuizApp() {
                 
                 {/* 코드 블록 (코드 카드인 경우) */}
                 {currentCard.type === '코드' && currentCard.code && (
-                  <div className="bg-gray-900 text-green-400 p-2 sm:p-3 rounded text-xs sm:text-sm font-mono overflow-hidden mb-3">
+                  <div className="bg-gray-900 dark:bg-gray-800 text-green-400 dark:text-green-300 p-2 sm:p-3 rounded text-xs sm:text-sm font-mono overflow-hidden mb-3">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2">
-                      <span className="text-gray-400 text-xs">실행 코드:</span>
+                      <span className="text-gray-400 dark:text-gray-500 text-xs">실행 코드:</span>
                       <button
                         onClick={() => {
                           navigator.clipboard.writeText(currentCard.code || '');
@@ -362,7 +362,7 @@ export default function AiceQuizApp() {
                           btn.textContent = '복사됨!';
                           setTimeout(() => btn.textContent = originalText, 1000);
                         }}
-                        className="text-xs px-2 py-1 bg-gray-700 text-gray-300 rounded hover:bg-gray-600 transition-colors self-start sm:self-auto"
+                        className="text-xs px-2 py-1 bg-gray-700 dark:bg-gray-600 text-gray-300 dark:text-gray-200 rounded hover:bg-gray-600 dark:hover:bg-gray-500 transition-colors self-start sm:self-auto"
                       >
                         📋 복사
                       </button>
@@ -400,7 +400,7 @@ export default function AiceQuizApp() {
                   <p className="text-muted-foreground mb-4">
                     점수: {score} / {totalAnswered} ({Math.round((score / totalAnswered) * 100)}%)
                   </p>
-                  <Button onClick={restartQuiz} className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto text-sm">
+                  <Button onClick={restartQuiz} className="bg-primary hover:bg-primary/90 w-full sm:w-auto text-sm">
                     🔄 다시 시작
                   </Button>
                 </div>
