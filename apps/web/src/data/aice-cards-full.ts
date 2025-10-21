@@ -2215,13 +2215,21 @@ export const getSections = () => {
 
 // 퀴즈 옵션 생성 (안정적인 버전)
 export const generateQuizOptions = (card: AiceCard): string[] => {
+  console.log('=== 옵션 생성 디버깅 ===');
+  console.log('카드 ID:', card.id);
+  console.log('카드 타입:', card.type);
+  console.log('카드 정답:', card.answer);
+  console.log('카드 코드:', card.code);
+  
   const options: string[] = [];
   
   // 정답 추가
   if (card.type === '코드' && card.code) {
     options.push(card.code);
+    console.log('코드 타입 - 정답 추가:', card.code);
   } else {
     options.push(card.answer);
+    console.log('개념 타입 - 정답 추가:', card.answer);
   }
   
   // 카드 ID를 기반으로 일관된 오답 생성
@@ -2232,15 +2240,23 @@ export const generateQuizOptions = (card: AiceCard): string[] => {
     c.id !== card.id
   );
   
+  console.log('비슷한 카드 수:', similarCards.length);
+  console.log('카드 ID 해시:', cardIdHash);
+  
   if (similarCards.length > 0) {
     // 카드 ID 해시를 사용하여 일관된 선택
     const selectedIndex = cardIdHash % similarCards.length;
     const selectedCard = similarCards[selectedIndex];
     
+    console.log('선택된 카드 인덱스:', selectedIndex);
+    console.log('선택된 카드 ID:', selectedCard.id);
+    
     if (selectedCard.type === '코드' && selectedCard.code) {
       options.push(selectedCard.code);
+      console.log('선택된 카드 코드:', selectedCard.code);
     } else {
       options.push(selectedCard.answer);
+      console.log('선택된 카드 정답:', selectedCard.answer);
     }
   } else {
     // 비슷한 카드가 없으면 간단한 변형 사용
@@ -2250,11 +2266,13 @@ export const generateQuizOptions = (card: AiceCard): string[] => {
         .replace(/as np/g, 'as numpy')
         .replace(/as pd/g, 'as pandas');
       options.push(wrongCode);
+      console.log('생성된 오답 코드:', wrongCode);
     } else {
       const wrongAnswer = card.answer
         .replace(/핵심:/g, '주의:')
         .replace(/근거:/g, '이유:');
       options.push(wrongAnswer);
+      console.log('생성된 오답 정답:', wrongAnswer);
     }
   }
   
@@ -2265,5 +2283,10 @@ export const generateQuizOptions = (card: AiceCard): string[] => {
   const correctAnswer = card.type === '코드' && card.code ? card.code : card.answer;
   const wrongAnswer = uniqueOptions.find(opt => opt !== correctAnswer);
   
-  return [correctAnswer, wrongAnswer].filter(Boolean);
+  const finalOptions = [correctAnswer, wrongAnswer].filter(Boolean);
+  
+  console.log('최종 옵션들:', finalOptions);
+  console.log('========================');
+  
+  return finalOptions;
 };

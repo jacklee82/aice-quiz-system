@@ -104,6 +104,20 @@ export default function AiceQuizApp() {
     const selectedOptionText = options[optionIndex];
     const correctAnswer = currentCard.type === '코드' && currentCard.code ? currentCard.code : currentCard.answer;
     
+    // 디버깅 로그
+    console.log('=== 정답 판정 디버깅 ===');
+    console.log('카드 ID:', currentCard.id);
+    console.log('카드 질문:', currentCard.question);
+    console.log('카드 타입:', currentCard.type);
+    console.log('카드 정답:', currentCard.answer);
+    console.log('카드 코드:', currentCard.code);
+    console.log('생성된 옵션들:', options);
+    console.log('선택한 옵션 인덱스:', optionIndex);
+    console.log('선택한 옵션 텍스트:', selectedOptionText);
+    console.log('정답으로 판정할 텍스트:', correctAnswer);
+    console.log('일치 여부:', selectedOptionText === correctAnswer);
+    console.log('========================');
+    
     if (selectedOptionText === correctAnswer) {
       setScore(prev => prev + 1);
     }
