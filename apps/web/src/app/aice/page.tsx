@@ -29,6 +29,10 @@ export default function AiceQuizApp() {
   
   // 각 카드의 옵션을 저장하는 상태
   const [cardOptions, setCardOptions] = useState<{[key: string]: string[]}>({});
+  
+  // 힌트 시스템 상태
+  const [showHints, setShowHints] = useState(false);
+  const [usedHints, setUsedHints] = useState<number[]>([]);
 
   const currentCard = shuffledCards[currentCardIndex];
   const progressPercentage = shuffledCards.length > 0 ? ((currentCardIndex + 1) / shuffledCards.length) * 100 : 0;
@@ -73,11 +77,13 @@ export default function AiceQuizApp() {
     
     setCardOptions(prev => ({...prev, ...newCardOptions}));
     
-    setCurrentCardIndex(0);
+      setCurrentCardIndex(0);
     setSelectedOption(null);
     setShowResult(false);
     setScore(0);
     setTotalAnswered(0);
+    setShowHints(false);
+    setUsedHints([]);
   }, [selectedCategory, selectedDifficulty, selectedType, isRandomMode, questionCount]);
 
   // 퀴즈 옵션 생성 (저장된 옵션 사용)
@@ -109,6 +115,8 @@ export default function AiceQuizApp() {
       setCurrentCardIndex(prev => prev + 1);
       setSelectedOption(null);
       setShowResult(false);
+      setShowHints(false);
+      setUsedHints([]);
     }
   };
 
@@ -118,6 +126,8 @@ export default function AiceQuizApp() {
       setCurrentCardIndex(prev => prev - 1);
       setSelectedOption(null);
       setShowResult(false);
+      setShowHints(false);
+      setUsedHints([]);
     }
   };
 
@@ -130,6 +140,20 @@ export default function AiceQuizApp() {
     setShowResult(false);
     setScore(0);
     setTotalAnswered(0);
+    setShowHints(false);
+    setUsedHints([]);
+  };
+
+  // 힌트 토글
+  const toggleHints = () => {
+    setShowHints(!showHints);
+  };
+
+  // 힌트 사용
+  const useHint = (hintIndex: number) => {
+    if (!usedHints.includes(hintIndex)) {
+      setUsedHints(prev => [...prev, hintIndex]);
+    }
   };
 
   // 퀴즈 완료 여부
@@ -429,9 +453,61 @@ export default function AiceQuizApp() {
           <CardContent className="space-y-6 w-full min-w-0">
             {/* 질문 */}
             <div className="w-full min-w-0">
-              <h2 className="text-base sm:text-xl font-semibold text-foreground mb-4 break-words leading-tight w-full">
+              <div className="flex items-start justify-between gap-4 mb-4">
+                <h2 className="text-base sm:text-xl font-semibold text-foreground break-words leading-tight flex-1">
                 {currentCard.question}
               </h2>
+                {currentCard.hints && currentCard.hints.length > 0 && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={toggleHints}
+                    className="flex-shrink-0"
+                  >
+                    💡 힌트 ({currentCard.hints.length}개)
+                  </Button>
+                )}
+              </div>
+              
+              {/* 힌트 섹션 */}
+              {showHints && currentCard.hints && (
+                <div className="mb-4 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                  <h3 className="font-medium text-amber-800 dark:text-amber-200 mb-3 flex items-center gap-2">
+                    💡 힌트
+                  </h3>
+                  <div className="space-y-2">
+                    {currentCard.hints.map((hint, index) => (
+                      <div key={index} className="flex items-start gap-2">
+                    <button
+                          onClick={() => useHint(index)}
+                          className={`text-xs px-2 py-1 rounded transition-colors ${
+                            usedHints.includes(index)
+                              ? 'bg-amber-200 dark:bg-amber-800 text-amber-900 dark:text-amber-100'
+                              : 'bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-800'
+                          }`}
+                        >
+                          {usedHints.includes(index) ? '✓' : '👁️'}
+                    </button>
+                        <div className="flex-1">
+                          <span className="text-xs font-medium text-amber-700 dark:text-amber-300">
+                            {hint.type === 'library' && '📚 라이브러리: '}
+                            {hint.type === 'concept' && '🧠 개념: '}
+                            {hint.type === 'tip' && '💡 팁: '}
+                            {hint.type === 'code' && '💻 코드: '}
+                          </span>
+                          <span className={`text-sm ${
+                            usedHints.includes(index) 
+                              ? 'text-amber-900 dark:text-amber-100' 
+                              : 'text-amber-600 dark:text-amber-400'
+                          }`}>
+                            {usedHints.includes(index) ? hint.content : '클릭하여 힌트 보기'}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
                 </div>
 
             {/* 선택지 */}

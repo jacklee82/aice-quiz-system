@@ -1,3 +1,9 @@
+// 힌트 타입 정의
+export interface Hint {
+  type: 'library' | 'concept' | 'tip' | 'code';
+  content: string;
+}
+
 // AICE 전체 카드 데이터 (HTML에서 파싱된 데이터)
 export interface AiceCard {
   id: string;
@@ -13,6 +19,8 @@ export interface AiceCard {
   // 퀴즈용 필드
   quizOptions?: string[];
   correctAnswer?: number;
+  // 힌트 시스템
+  hints?: Hint[];
 }
 
 // 유형별 카테고리 매핑
@@ -35,7 +43,72 @@ const categoryMapping: { [key: string]: string } = {
 
 // 샘플 카드 데이터 (실제로는 HTML 파싱 결과를 사용)
 export const aiceCards: AiceCard[] = [
-  // 유형 1: 라이브러리 임포트
+  // 실무 상황 문제 예시
+  {
+    id: 'scenario-1',
+    type: '개념',
+    category: '실무 상황',
+    question: '고객 데이터에서 이상치(outlier)를 찾아 제거해야 합니다. 100만 행의 데이터에서 메모리 효율적으로 처리하려면?',
+    answer: 'IQR 방법을 사용하여 이상치를 식별하고, Pandas의 query() 메서드로 필터링하여 메모리 효율적으로 처리합니다.',
+    keywords: ['이상치', 'IQR', '메모리', 'Pandas'],
+    difficulty: 'hard',
+    explanation: 'IQR(Interquartile Range) 방법은 통계적으로 안정적이며, query() 메서드는 벡터화된 연산으로 메모리 효율적입니다.',
+    section: 'scenario',
+    hints: [
+      { type: 'library', content: 'Pandas - 데이터 조작 및 필터링' },
+      { type: 'library', content: 'NumPy - 통계 계산' },
+      { type: 'concept', content: 'IQR = Q3 - Q1, 이상치 = Q1 - 1.5*IQR 또는 Q3 + 1.5*IQR' },
+      { type: 'tip', content: 'query() 메서드가 boolean indexing보다 메모리 효율적입니다.' }
+    ]
+  },
+  {
+    id: 'scenario-2',
+    type: '코드',
+    category: '실무 상황',
+    question: '대용량 CSV 파일(5GB)을 메모리 부족 없이 읽어서 전처리하려면?',
+    answer: 'chunksize 파라미터를 사용하여 청크 단위로 읽고, 각 청크를 순차적으로 처리합니다.',
+    code: `import pandas as pd
+
+# 청크 단위로 파일 읽기
+chunk_size = 10000
+processed_data = []
+
+for chunk in pd.read_csv('large_file.csv', chunksize=chunk_size):
+    # 각 청크 전처리
+    chunk = chunk.dropna()
+    chunk = chunk[chunk['value'] > 0]
+    processed_data.append(chunk)
+
+# 최종 데이터 합치기
+final_data = pd.concat(processed_data, ignore_index=True)`,
+    keywords: ['청크', '메모리', '대용량', 'CSV'],
+    difficulty: 'hard',
+    explanation: 'chunksize를 사용하면 메모리 사용량을 제어하면서 대용량 파일을 처리할 수 있습니다.',
+    section: 'scenario',
+    hints: [
+      { type: 'library', content: 'Pandas - read_csv()의 chunksize 파라미터' },
+      { type: 'concept', content: '청크 단위 처리로 메모리 사용량 제어' },
+      { type: 'tip', content: 'concat()으로 최종 결과를 합칩니다.' }
+    ]
+  },
+  {
+    id: 'scenario-3',
+    type: '개념',
+    category: '실무 상황',
+    question: '머신러닝 모델의 성능이 훈련 데이터에서는 좋지만 테스트 데이터에서는 나쁩니다. 원인과 해결책은?',
+    answer: '과적합(Overfitting) 문제입니다. 해결책: 1) 더 많은 데이터 수집, 2) 정규화 적용, 3) 교차 검증, 4) 모델 복잡도 감소',
+    keywords: ['과적합', '정규화', '교차검증', '모델성능'],
+    difficulty: 'hard',
+    explanation: '과적합은 모델이 훈련 데이터에만 특화되어 일반화 능력이 떨어지는 현상입니다.',
+    section: 'scenario',
+    hints: [
+      { type: 'library', content: 'scikit-learn - cross_val_score, GridSearchCV' },
+      { type: 'library', content: 'scikit-learn - L1, L2 정규화' },
+      { type: 'concept', content: '과적합: 훈련 성능 > 테스트 성능' },
+      { type: 'tip', content: '교차 검증으로 모델의 일반화 능력을 평가하세요.' }
+    ]
+  },
+  // 기존 문제들...
   {
     id: '1-1',
     type: '개념',
