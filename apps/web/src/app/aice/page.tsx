@@ -195,7 +195,7 @@ export default function AiceQuizApp() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 overflow-x-hidden">
-      <div className="max-w-2xl mx-auto w-full p-1 sm:p-4">
+      <div className="max-w-2xl mx-auto w-full p-1 sm:p-4 min-w-0">
       {/* 헤더 */}
         <div className="mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
@@ -327,9 +327,9 @@ export default function AiceQuizApp() {
         </div>
 
         {/* 퀴즈 카드 */}
-        <Card className="shadow-lg overflow-hidden">
-          <CardHeader className="pb-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <Card className="shadow-lg overflow-hidden w-full">
+          <CardHeader className="pb-4 w-full">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 w-full">
               <div className="flex flex-wrap items-center gap-2">
                 <Badge variant="secondary" className="text-xs">{currentCard.category}</Badge>
                 <Badge variant="outline" className={`text-xs ${
@@ -347,16 +347,16 @@ export default function AiceQuizApp() {
             </div>
           </CardHeader>
 
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-6 w-full min-w-0">
             {/* 질문 */}
-            <div>
-              <h2 className="text-base sm:text-xl font-semibold text-foreground mb-4 break-words leading-tight">
+            <div className="w-full min-w-0">
+              <h2 className="text-base sm:text-xl font-semibold text-foreground mb-4 break-words leading-tight w-full">
                 {currentCard.question}
               </h2>
                 </div>
 
             {/* 선택지 */}
-            <div className="space-y-3">
+            <div className="space-y-3 w-full min-w-0">
               {getQuizOptions(currentCard).map((option, index) => {
                 const isSelected = selectedOption === index;
                 const isCorrect = index === 0; // 첫 번째 옵션이 정답
@@ -367,7 +367,7 @@ export default function AiceQuizApp() {
                   <Button
                     key={index}
                     variant="outline"
-                    className={`w-full justify-start p-2 sm:p-4 h-auto text-left ${
+                    className={`w-full justify-start p-2 sm:p-4 h-auto text-left min-w-0 ${
                       !showResult 
                         ? 'hover:bg-primary/10 hover:border-primary/30' 
                         : showCorrect
@@ -379,8 +379,8 @@ export default function AiceQuizApp() {
                     onClick={() => handleOptionSelect(index)}
                     disabled={selectedOption !== null}
                   >
-                    <div className="flex items-start justify-between w-full min-w-0">
-                      <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between w-full min-w-0 overflow-hidden">
+                      <div className="flex-1 min-w-0 overflow-hidden">
                         <div className="font-medium mb-2 text-sm">
                           {String.fromCharCode(65 + index)}.
                         </div>
