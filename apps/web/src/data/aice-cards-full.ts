@@ -2213,7 +2213,7 @@ export const getSections = () => {
   return [...new Set(aiceCards.map(card => card.section))];
 };
 
-// 퀴즈 옵션 생성
+// 퀴즈 옵션 생성 (안정적인 버전)
 export const generateQuizOptions = (card: AiceCard): string[] => {
   const options: string[] = [];
   
@@ -2224,7 +2224,8 @@ export const generateQuizOptions = (card: AiceCard): string[] => {
     options.push(card.answer);
   }
   
-  // 비슷한 카드에서 오답 생성
+  // 카드 ID를 기반으로 일관된 오답 생성
+  const cardIdHash = card.id.split('-').reduce((acc, part) => acc + part.charCodeAt(0), 0);
   const similarCards = aiceCards.filter(c => 
     c.type === card.type && 
     c.category === card.category && 
@@ -2232,42 +2233,37 @@ export const generateQuizOptions = (card: AiceCard): string[] => {
   );
   
   if (similarCards.length > 0) {
-    const randomCard = similarCards[Math.floor(Math.random() * similarCards.length)];
-    if (randomCard.type === '코드' && randomCard.code) {
-      options.push(randomCard.code);
+    // 카드 ID 해시를 사용하여 일관된 선택
+    const selectedIndex = cardIdHash % similarCards.length;
+    const selectedCard = similarCards[selectedIndex];
+    
+    if (selectedCard.type === '코드' && selectedCard.code) {
+      options.push(selectedCard.code);
     } else {
-      options.push(randomCard.answer);
+      options.push(selectedCard.answer);
     }
-  }
-  
-  // 다른 유형에서 오답 생성
-  const otherCards = aiceCards.filter(c => c.id !== card.id);
-  if (otherCards.length > 0) {
-    const randomCard = otherCards[Math.floor(Math.random() * otherCards.length)];
-    if (randomCard.type === '코드' && randomCard.code) {
-      options.push(randomCard.code);
-    } else {
-      options.push(randomCard.answer);
-    }
-  }
-  
-  // 간단한 변형으로 오답 생성
-  if (card.type === '코드' && card.code) {
-    const wrongCode = card.code
-      .replace(/import/g, 'from')
-      .replace(/as np/g, 'as numpy')
-      .replace(/as pd/g, 'as pandas');
-    options.push(wrongCode);
   } else {
-    const wrongAnswer = card.answer
-      .replace(/핵심:/g, '주의:')
-      .replace(/근거:/g, '이유:');
-    options.push(wrongAnswer);
+    // 비슷한 카드가 없으면 간단한 변형 사용
+    if (card.type === '코드' && card.code) {
+      const wrongCode = card.code
+        .replace(/import/g, 'from')
+        .replace(/as np/g, 'as numpy')
+        .replace(/as pd/g, 'as pandas');
+      options.push(wrongCode);
+    } else {
+      const wrongAnswer = card.answer
+        .replace(/핵심:/g, '주의:')
+        .replace(/근거:/g, '이유:');
+      options.push(wrongAnswer);
+    }
   }
   
   // 2개 선택지만 반환 (정답 + 오답 1개)
   const uniqueOptions = [...new Set(options)];
-  const shuffled = uniqueOptions.sort(() => Math.random() - 0.5);
   
-  return shuffled.slice(0, 2);
+  // 정답을 항상 첫 번째에 배치
+  const correctAnswer = card.type === '코드' && card.code ? card.code : card.answer;
+  const wrongAnswer = uniqueOptions.find(opt => opt !== correctAnswer);
+  
+  return [correctAnswer, wrongAnswer].filter(Boolean);
 };
